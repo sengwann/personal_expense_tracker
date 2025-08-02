@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container {
+  height: 100vh;
+}
+form {
+  border: 1px solid green;
+  width: 300px;
+  margin: 0 auto;
+}
