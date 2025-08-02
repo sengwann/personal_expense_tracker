@@ -10,7 +10,7 @@ import {
   HStack,
   Tooltip,
 } from "@chakra-ui/react";
-import { getSymbol } from "@/app/lib/utils/util";
+import { getSymbol, formatAmount } from "@/app/lib/utils/util";
 import { memo, useState, useEffect } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
@@ -36,7 +36,7 @@ const DisplayBalance = memo(({ mainTotals }) => {
         <StatNumber color="#2563EB" fontSize={{ base: "lg", md: "2xl" }}>
           <Text as="span" fontFamily="monospace">
             {showBalance
-              ? `${mainTotals?.totalIncome || 0} ${getSymbol(
+              ? `${formatAmount(mainTotals?.totalIncome || 0)} ${getSymbol(
                   mainTotals?.currency || "THB"
                 )}`
               : "*****"}
@@ -50,7 +50,7 @@ const DisplayBalance = memo(({ mainTotals }) => {
         <StatNumber color="#EF4444" fontSize={{ base: "lg", md: "2xl" }}>
           <Text as="span" fontFamily="monospace">
             {showBalance
-              ? `${mainTotals?.totalExpense || 0} ${getSymbol(
+              ? `${formatAmount(mainTotals?.totalExpense || 0)} ${getSymbol(
                   mainTotals?.currency || "THB"
                 )}`
               : "*****"}
@@ -74,7 +74,9 @@ const DisplayBalance = memo(({ mainTotals }) => {
                   fontFamily="monospace"
                 >
                   {showBalance
-                    ? `${balance} ${getSymbol(mainTotals?.currency || "THB")}`
+                    ? `${formatAmount(balance)} ${getSymbol(
+                        mainTotals?.currency || "THB"
+                      )}`
                     : "*****"}
                 </Text>
                 <Tooltip

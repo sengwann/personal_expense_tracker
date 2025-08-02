@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 export const expenseByCategory = ["food", "shopping", "health", "other"];
 export const incomeByCategory = ["salary", "gift", "investment", "bonus"];
 export const currency = ["THB", "MMK"];
@@ -229,3 +227,35 @@ export const getCategoryIcon = (category, Md, Fa) => {
       return Md.MdCategory;
   }
 };
+
+export function getNameFromEmail(email) {
+  if (!email) return "";
+
+  // Step 1: Get the part before '@'
+  const localPart = email.split("@")[0];
+
+  // Step 2: Remove all digits
+  const nameOnly = localPart.replace(/\d+/g, "");
+
+  // Step 3: Capitalize the first letter
+  return nameOnly.charAt(0).toUpperCase() + nameOnly.slice(1).toLowerCase();
+}
+
+export function getSymbol(currency) {
+  return {
+    THB: "฿",
+    MMK: "Ks",
+  }[currency];
+}
+
+export function formatDate(dateStr) {
+  return dateStr
+    ? new Date(dateStr).toISOString().split("T")[0]
+    : new Date().toISOString().split("T")[0];
+}
+export function formatAmount(amount) {
+  if (typeof amount !== "number") {
+    amount = Number(amount);
+  }
+  return amount.toLocaleString("en-US");
+}

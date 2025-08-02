@@ -261,17 +261,22 @@ function UpdateTransactionModal({
                 <FormLabel color="#374151">Amount</FormLabel>
                 <Input
                   type="number"
-                  min={1}
                   name="amount"
                   required
                   value={updatedData.amount}
                   onChange={(e) => {
                     const newAmount = e.target.value;
-                    setUpdatedData((prevData) => ({
-                      ...prevData,
-                      amount: +newAmount,
-                    }));
+
+                    // Only allow numbers and prevent typing non-numeric characters
+                    if (/^\d*\.?\d*$/.test(newAmount)) {
+                      setUpdatedData((prevData) => ({
+                        ...prevData,
+                        amount: +newAmount,
+                      }));
+                    }
                   }}
+                  inputMode="decimal"
+                  pattern="[0-9]*"
                 />
               </FormControl>
 

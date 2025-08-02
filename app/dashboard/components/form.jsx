@@ -11,7 +11,7 @@ import {
   Button,
   useToast,
 } from "@chakra-ui/react";
-import { doc, runTransaction, collection } from "firebase/firestore";
+import { doc, runTransaction, collection, Timestamp } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import {
   showToast,
@@ -20,6 +20,7 @@ import {
   expenseByCategory,
   incomeByCategory,
   currency,
+  formatDate,
   currencyOptions,
   categoryOptions,
 } from "../../lib/utils/util";
@@ -33,7 +34,7 @@ const TransactionForm = memo(({ userId, mutateTransactions }) => {
     date: formatDate(),
     amount: "",
     description: "",
-    currency: "",
+    currency: "THB",
   });
   const [loading, setLoading] = useState(false);
 
@@ -49,14 +50,20 @@ const TransactionForm = memo(({ userId, mutateTransactions }) => {
       if (name === "date") {
         return { ...prev, date: value };
       }
+      // Prevent non-numeric input for amount
+      if (name === "amount") {
+        // Only allow numbers and empty string
+        if (!/^\d*\.?\d*$/.test(value)) {
+          return prev;
+        }
+        return {
+          ...prev,
+          amount: value === "" ? "" : Math.max(0, Number(value)),
+        };
+      }
       return {
         ...prev,
-        [name]:
-          name === "amount"
-            ? value === ""
-              ? ""
-              : Math.max(0, Number(value))
-            : value,
+        [name]: value,
       };
     });
   }, []);
@@ -75,7 +82,7 @@ const TransactionForm = memo(({ userId, mutateTransactions }) => {
 
     const newTransaction = {
       ...formData,
-      date: formData.date, // ensure only YYYY-MM-DD is stored
+      date: Timestamp.fromDate(new Date(`${formData.date}T00:00:00Z`)),
       amount,
       id: tranRef.id,
     };
@@ -138,7 +145,7 @@ const TransactionForm = memo(({ userId, mutateTransactions }) => {
       date: formatDate(),
       amount: "",
       description: "",
-      currency: "",
+      currency: "THB",
     });
   };
 
@@ -183,6 +190,7 @@ const TransactionForm = memo(({ userId, mutateTransactions }) => {
               name="date"
               value={formData.date || ""}
               onChange={handleChange}
+              required
             />
           </FormControl>
 
@@ -206,7 +214,6 @@ const TransactionForm = memo(({ userId, mutateTransactions }) => {
                   onChange={handleChange}
                   required
                 >
-                  <option value="">Select currency</option>
                   {currencyOptions(currency)}
                 </Select>
               </InputRightAddon>

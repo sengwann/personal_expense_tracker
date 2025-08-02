@@ -26,12 +26,20 @@ const exportToExcel = async (userId, filters, toast) => {
   const fileName = `Expenses_${new Date().toISOString().slice(0, 10)}.xlsx`;
 
   // Convert transactions to rows
-  const headers = ["Date", "Type", "Category", "Amount", "Description"];
+  const headers = [
+    "Date",
+    "Type",
+    "Category",
+    "Amount",
+    "Currency",
+    "Description",
+  ];
   const data = transactions.map((tx) => [
     formatDate(tx.date),
     tx.type,
     tx.category,
     tx.amount,
+    tx.currency,
     tx.description || "N/A",
   ]);
 

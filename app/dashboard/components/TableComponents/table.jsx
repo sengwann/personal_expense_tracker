@@ -32,6 +32,7 @@ import {
   formatDate,
   isAllZeroTotals,
   getSymbol,
+  formatAmount,
 } from "@/app/lib/utils/util";
 
 function TransactionsTable({
@@ -163,7 +164,7 @@ function TransactionsTable({
             {transaction.description}
           </Td>
           <Td isNumeric>
-            {transaction.amount}{" "}
+            {formatAmount(transaction.amount)}{" "}
             <Text as="span" color="gray.500" fontWeight="bold">
               {getSymbol(transaction?.currency || "THB")}
             </Text>

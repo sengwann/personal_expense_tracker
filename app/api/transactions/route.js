@@ -66,7 +66,7 @@ export async function GET(req) {
     const type = searchParams.get("type") || "";
     const category = searchParams.get("category") || "";
     const limit = Number(searchParams.get("limit")) || 5;
-    const startDate =
+    const startDateStr =
       searchParams.get("startDate") || format(firstDay, "yyyy-MM-dd");
     const endDateStr =
       searchParams.get("endDate") || format(lastDay, "yyyy-MM-dd");
@@ -89,6 +89,9 @@ export async function GET(req) {
         error: "Invalid endDate format. Use YYYY-MM-DD.",
       });
     }
+
+    const startDate = Timestamp.fromDate(new Date(`${startDateStr}T00:00:00Z`));
+    const endDate = Timestamp.fromDate(new Date(`${endDateStr}T23:59:59Z`));
 
     // Firestore queries
     let tranQuery = db
