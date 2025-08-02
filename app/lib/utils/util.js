@@ -259,3 +259,21 @@ export function formatAmount(amount) {
   }
   return amount.toLocaleString("en-US");
 }
+export function isAllZeroTotals(totals) {
+  // Check top-level totals
+  if ((totals?.totalExpense || 0) > 0) return false;
+  if ((totals?.totalIncome || 0) > 0) return false;
+
+  // Check all category totals using every
+  const expenseCategories = totals?.expenseByCategory || {};
+  const incomeCategories = totals?.incomeByCategory || {};
+
+  const allExpenseZero = Object.values(expenseCategories).every(
+    (val) => val === 0
+  );
+  const allIncomeZero = Object.values(incomeCategories).every(
+    (val) => val === 0
+  );
+
+  return allExpenseZero && allIncomeZero;
+}
